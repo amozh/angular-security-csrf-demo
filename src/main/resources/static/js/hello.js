@@ -13,8 +13,16 @@ angular.module('hello', [ 'ngRoute' ]) // ... omitted code
 
     })
     .controller('home', function($scope, $http) {
-        $http.get('/resource/').success(function(data) {
-            $scope.greeting = data;
+        $http.get('token').success(function(token) {
+            $http({
+                url : '/resource',
+                method : 'GET',
+                headers : {
+                    'X-Auth-Token' : token.token
+                }
+            }).success(function(data) {
+                $scope.greeting = data;
+            });
         })
     })
     .controller('navigation',
@@ -38,7 +46,7 @@ angular.module('hello', [ 'ngRoute' ]) // ... omitted code
                 callback && callback();
             });
 
-        }
+        };
 
         authenticate();
         $scope.credentials = {};
